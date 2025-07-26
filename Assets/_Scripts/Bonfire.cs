@@ -9,6 +9,6 @@ public class Bonfire : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        Debug.Log(Random.Range(1, 100));
+        //Relight the Fire Torch
     }
 }
