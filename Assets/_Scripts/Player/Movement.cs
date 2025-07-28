@@ -18,19 +18,20 @@ public class Movement : MonoBehaviour
     public float speed = 6f;
     public float runSpeed = 10f;
     private float originalSpeed;
-    
+
 
     [Header("Jumping & Gravity")]
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
     private Vector3 velocity;
-    
+
 
     [Header("Crouching")]
     public float crouchHeight = 1f;
     private float originalHeight;
     public float crouchSpeed = 3f;
     private bool isCrouching;
+
 
     private void Start()
     {
@@ -46,6 +47,12 @@ public class Movement : MonoBehaviour
         HandleRun();
         HandleCrouchToggle();
         ApplyGravity();
+
+        if (!isCrouching)
+        {
+            controller.height = Mathf.Lerp(controller.height, originalHeight, Time.deltaTime * 10f);
+        }
+
     }
 
     private void HandleGroundCheck()
@@ -116,7 +123,6 @@ public class Movement : MonoBehaviour
 
     private void StandUp()
     {
-        controller.height = originalHeight;
         isCrouching = false;
     }
 }
