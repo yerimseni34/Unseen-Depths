@@ -134,12 +134,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   groundCheckDistance: 0.4
-  speed: 2
+  walkSpeed: 6
   runSpeed: 3.5
   gravity: -39.24
   jumpHeight: 1.5
-  crouchHeight: 1.7
-  crouchSpeed: 1
+  airControlMultiplier: 0.5
+  groundAcceleration: 10
+  airAcceleration: 3
 --- !u!114 &6732438585123030882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6781286752461205633
 Transform:
   m_ObjectHideFlags: 0
@@ -550,6 +551,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3661182023027037043, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
+      propertyPath: m_Name
+      value: Torh
+      objectReference: {fileID: 0}
+    - target: {fileID: 3661182023027037043, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
@@ -588,6 +593,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3661182023027037043, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 15393193834515721}
+    - targetCorrespondingSourceObject: {fileID: 3661182023027037043, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2090674694689651182}
   m_SourcePrefab: {fileID: 100100000, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
 --- !u!1 &853188759651142796 stripped
 GameObject:
@@ -613,9 +621,32 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3335442511603561631, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
+--- !u!114 &2090674694689651182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853188759651142796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f635f29f1d7ebf4c91707a61e808952, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torchDuration: 0
+  torchDurationMax: 60
+  rangeMultiplier: 0
+  intensityMultiplier: 0
+  rateOverTime: 0
+  rangeMultiplierMax: 0
+  intensityMultiplierMax: 0
+  rateOverTimeMax: 0
+  lightParticleSystem: {fileID: 4611166261120352074}
+  VFXParticleSystem: {fileID: 5021447495676778755}
+  VFXParticleSystem2: {fileID: 8729772463409916768}
 --- !u!4 &4508871182643312660 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e63bb177cbef6204eb161709bcdf2fe8, type: 3}
@@ -629,6 +660,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4508871182643312660}
     m_Modifications:
+    - target: {fileID: 296230944595500747, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: LightsModule.maxLights
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 296230944595500747, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 296230944595500747, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 434770577965505361, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -733,5 +776,20 @@ PrefabInstance:
 --- !u!4 &2546937771989341008 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1781949194303238865, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+  m_PrefabInstance: {fileID: 4315094067107062145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4611166261120352074 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 296230944595500747, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+  m_PrefabInstance: {fileID: 4315094067107062145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &5021447495676778755 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9101080872212838530, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
+  m_PrefabInstance: {fileID: 4315094067107062145}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8729772463409916768 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4811017566070180577, guid: dd986d04bcc6dc748a53d8c3d1d42a6d, type: 3}
   m_PrefabInstance: {fileID: 4315094067107062145}
   m_PrefabAsset: {fileID: 0}

@@ -2,127 +2,137 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-
     [Header("References")]
     public CharacterController controller;
     public Transform groundCheck;
     public LayerMask groundMask;
 
-
     [Header("Ground Check")]
     public float groundCheckDistance = 0.4f;
     private bool isGrounded;
 
-
     [Header("Movement")]
-    public float speed = 6f;
+    public float walkSpeed = 6f;
     public float runSpeed = 10f;
-    private float originalSpeed;
-
+    private float currentSpeed;
+    private Vector3 moveDirection;
+    private Vector3 smoothVelocity;
 
     [Header("Jumping & Gravity")]
-    public float gravity = -9.81f;
+    public float gravity = -20f;
     public float jumpHeight = 2f;
-    private Vector3 velocity;
+    private float verticalVelocity;
+    public float airControlMultiplier = 0.5f;
+    public float groundAcceleration = 10f;
+    public float airAcceleration = 3f;
 
-
-    [Header("Crouching")]
-    public float crouchHeight = 1f;
-    private float originalHeight;
-    public float crouchSpeed = 3f;
-    private bool isCrouching;
-
+    //[Header("Crouching")]
+    //public float crouchHeight = 1f;
+    //private float originalHeight;
+    //public float crouchSpeed = 3f;
+    //private bool isCrouching;
 
     private void Start()
     {
-        originalSpeed = speed;
-        originalHeight = controller.height;
+        currentSpeed = walkSpeed;
+        //originalHeight = controller.height;
     }
 
     private void Update()
     {
         HandleGroundCheck();
+        HandleRun();
         HandleMovement();
         HandleJump();
-        HandleRun();
-        HandleCrouchToggle();
         ApplyGravity();
 
-        if (!isCrouching)
-        {
-            controller.height = Mathf.Lerp(controller.height, originalHeight, Time.deltaTime * 10f);
-        }
-
+        //if (!isCrouching)
+        //{
+        //    controller.height = Mathf.Lerp(controller.height, originalHeight, Time.deltaTime * 10f);
+        //}
     }
 
     private void HandleGroundCheck()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckDistance, groundMask);
-
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded && verticalVelocity < 0)
         {
-            velocity.y = -2f;
+            verticalVelocity = -2f; // yere çakılma hissini yumuşatır
+        }
+    }
+
+    private void HandleRun()
+    {
+        if (Input.GetKey(KeyCode.LeftShift)) // && !isCrouching
+        {
+            currentSpeed = runSpeed;
+        }
+        //else if (isCrouching)
+        //{
+        //    currentSpeed = crouchSpeed;
+        //}
+        else
+        {
+            currentSpeed = walkSpeed;
         }
     }
 
     private void HandleMovement()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
+        Vector3 inputDirection = (transform.right * x + transform.forward * z).normalized;
+
+        float acceleration = isGrounded ? groundAcceleration : airAcceleration;
+        float controlMultiplier = isGrounded ? 1f : airControlMultiplier;
+
+        moveDirection = Vector3.SmoothDamp(
+            moveDirection,
+            inputDirection * currentSpeed * controlMultiplier,
+            ref smoothVelocity,
+            1f / acceleration
+        );
+
+        Vector3 move = moveDirection * Time.deltaTime;
+        move.y = 0f; // yer hareketi
+        controller.Move(move);
     }
 
     private void HandleJump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-    }
-
-    private void HandleRun()
-    {
-        if (Input.GetKey(KeyCode.LeftShift) && !isCrouching)
-        {
-            speed = runSpeed;
-        }
-        else if (isCrouching)
-        {
-            speed = crouchSpeed;
-        }
-        else
-        {
-            speed = originalSpeed;
-        }
-    }
-
-    private void HandleCrouchToggle()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (isCrouching)
-                StandUp();
-            else
-                Crouch();
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
     private void ApplyGravity()
     {
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        verticalVelocity += gravity * Time.deltaTime;
+        Vector3 verticalMove = new Vector3(0f, verticalVelocity, 0f) * Time.deltaTime;
+        controller.Move(verticalMove);
     }
 
-    private void Crouch()
-    {
-        controller.height = crouchHeight;
-        isCrouching = true;
-    }
+    //private void HandleCrouchToggle()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.C))
+    //    {
+    //        if (isCrouching)
+    //            StandUp();
+    //        else
+    //            Crouch();
+    //    }
+    //}
 
-    private void StandUp()
-    {
-        isCrouching = false;
-    }
+    //private void Crouch()
+    //{
+    //    controller.height = crouchHeight;
+    //    isCrouching = true;
+    //}
+
+    //private void StandUp()
+    //{
+    //    isCrouching = false;
+    //}
 }
