@@ -30,7 +30,6 @@ public class Torch : MonoBehaviour
         lights = lightParticleSystem.lights;
         emmision = VFXParticleSystem.emission;
         emmision2 = VFXParticleSystem2.emission;
-        torchDuration = 0;
 
         rangeMultiplierMax = lights.rangeMultiplier;
         intensityMultiplierMax = lights.intensityMultiplier;

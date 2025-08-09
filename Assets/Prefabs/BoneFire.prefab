@@ -250,9 +250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7839ddda5998c9a419f81e45b8546552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  awakeLighting: 1
+  BoneFireParticleSystem: {fileID: 1969063025242130937}
 --- !u!1001 &7051237357051544353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -333,6 +332,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VFX_Fire_01_Big_Smoke
       objectReference: {fileID: 0}
+    - target: {fileID: 8829451551789304542, guid: 8206b722d11501a449d6a278cca2adfa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -341,5 +344,10 @@ PrefabInstance:
 --- !u!4 &1969063025242130936 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8829451551789304537, guid: 8206b722d11501a449d6a278cca2adfa, type: 3}
+  m_PrefabInstance: {fileID: 7051237357051544353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1969063025242130937 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8829451551789304536, guid: 8206b722d11501a449d6a278cca2adfa, type: 3}
   m_PrefabInstance: {fileID: 7051237357051544353}
   m_PrefabAsset: {fileID: 0}
